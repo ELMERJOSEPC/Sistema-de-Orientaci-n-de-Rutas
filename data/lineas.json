@@ -1,0 +1,111 @@
+[
+  {
+    "numero": "L50",
+    "color": "Azul",
+    "costo": 1.0,
+    "frecuencia_min": 7,
+    "paraderos": [
+      "EsSalud Salcedo",
+      "Av. El Sol",
+      "Terminal Terrestre",
+      "Mercado Central",
+      "Universidad",
+      "Hospital Regional"
+    ],
+    "vehiculos": [
+      {
+        "placa": "VAA-501",
+        "capacidad": 28
+      },
+      {
+        "placa": "VAA-502",
+        "capacidad": 28
+      }
+    ]
+  },
+  {
+    "numero": "L15",
+    "color": "Rojo",
+    "costo": 1.0,
+    "frecuencia_min": 8,
+    "paraderos": [
+      "EsSalud Salcedo",
+      "Av. Circunvalacion",
+      "Parque Pino",
+      "Plaza Vea",
+      "Av. La Torre",
+      "Universidad",
+      "Hospital Regional"
+    ],
+    "vehiculos": [
+      {
+        "placa": "VBB-151",
+        "capacidad": 25
+      },
+      {
+        "placa": "VBB-152",
+        "capacidad": 25
+      }
+    ]
+  },
+  {
+    "numero": "L20",
+    "color": "Verde",
+    "costo": 1.2,
+    "frecuencia_min": 10,
+    "paraderos": [
+      "EsSalud Salcedo",
+      "Mercado Bellavista",
+      "Terminal Terrestre",
+      "UNA Puno",
+      "Universidad"
+    ],
+    "vehiculos": [
+      {
+        "placa": "VCC-201",
+        "capacidad": 26
+      },
+      {
+        "placa": "VCC-202",
+        "capacidad": 26
+      }
+    ]
+  },
+  {
+    "numero": "L30",
+    "color": "Naranja",
+    "costo": 1.5,
+    "frecuencia_min": 12,
+    "paraderos": [
+      "EsSalud Salcedo",
+      "Puerto Muelle",
+      "Plaza de Armas",
+      "Terminal Terrestre",
+      "Universidad"
+    ],
+    "vehiculos": [
+      {
+        "placa": "VDD-301",
+        "capacidad": 24
+      }
+    ]
+  },
+  {
+    "numero": "L40",
+    "color": "Morado",
+    "costo": 1.0,
+    "frecuencia_min": 11,
+    "paraderos": [
+      "Chulluni",
+      "Puerto Muelle",
+      "Mercado Central",
+      "Terminal Terrestre"
+    ],
+    "vehiculos": [
+      {
+        "placa": "VEE-401",
+        "capacidad": 24
+      }
+    ]
+  }
+]

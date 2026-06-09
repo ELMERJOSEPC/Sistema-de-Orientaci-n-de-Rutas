@@ -1,0 +1,10 @@
+[
+  {
+    "id": 1,
+    "tipo": "congestion",
+    "paradero": "Terminal Terrestre",
+    "linea": "",
+    "motivo": "Alta congestión en hora punta",
+    "activa": false
+  }
+]

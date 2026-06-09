@@ -1,0 +1,55 @@
+PROYECTO PYTHON CON INTERFAZ PROFESIONAL
+========================================
+
+1. Descomprime el ZIP.
+2. Abre la carpeta sistema_rutas_puno en VS Code.
+3. Ejecuta la interfaz gráfica:
+
+   python run.py
+
+   o también:
+
+   python run_gui.py
+
+4. Para usar la versión de consola:
+
+   python run_cli.py
+
+5. Para probar el sistema:
+
+   python -m unittest discover -s tests -v
+
+CREDENCIALES
+============
+
+Administrador:
+usuario: admin
+contraseña: admin123
+
+Conductor:
+usuario: chofer1
+contraseña: clave123
+
+EJEMPLO DE PASAJERO
+===================
+
+Origen: EsSalud Salcedo
+Destino: Universidad
+
+Resultado esperado:
+Línea recomendada: L50
+Entropía de Shannon: H = 2.0 bits
+
+ARCHIVO NUEVO PRINCIPAL
+=======================
+
+rutas_puno/gui.py
+
+Este archivo contiene la interfaz gráfica profesional con Tkinter:
+- módulo pasajero
+- módulo conductor
+- módulo administrador
+- dashboard
+- incidencias
+- CRUD simple de líneas
+- apertura de ruta en Google Maps

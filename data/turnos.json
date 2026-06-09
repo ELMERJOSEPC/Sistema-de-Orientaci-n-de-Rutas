@@ -1,0 +1,18 @@
+[
+  {
+    "linea": "L50",
+    "placa": "VAA-501",
+    "hora_programada": "08:00",
+    "punto": "EsSalud Salcedo",
+    "estado": "programado",
+    "hora_real": ""
+  },
+  {
+    "linea": "L50",
+    "placa": "VAA-501",
+    "hora_programada": "08:00",
+    "punto": "Universidad",
+    "estado": "crítico",
+    "hora_real": "10:09"
+  }
+]

@@ -1,0 +1,277 @@
+\documentclass[stu,12pt,floatsintext]{apa7}
+
+% ===================== PAQUETES =====================
+\usepackage[spanish,es-tabla]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{csquotes}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{float}
+\usepackage{tikz}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage[style=apa,backend=biber,sortcites=true,sorting=nyt]{biblatex}
+\addbibresource{referencias.bib}
+
+\usetikzlibrary{arrows.meta,positioning,shapes.geometric,fit,calc}
+\hypersetup{colorlinks=true, linkcolor=black, citecolor=black, urlcolor=blue}
+\sloppy
+
+% ===================== ESTILOS DE DIAGRAMAS =====================
+\tikzset{
+  proceso/.style={rectangle, rounded corners, draw=blue!60, fill=blue!8, very thick, align=center, minimum width=3.3cm, minimum height=1cm, font=\small},
+  decision/.style={diamond, draw=purple!70, fill=purple!8, very thick, align=center, aspect=2, font=\small, inner sep=1pt},
+  entrada/.style={trapezium, trapezium left angle=70, trapezium right angle=110, draw=orange!70!black, fill=yellow!20, very thick, align=center, minimum width=3.3cm, minimum height=0.9cm, font=\small},
+  salida/.style={rectangle, rounded corners, draw=green!60!black, fill=green!12, very thick, align=center, minimum width=3.3cm, minimum height=1cm, font=\small},
+  alerta/.style={rectangle, rounded corners, draw=red!70!black, fill=red!8, very thick, align=center, minimum width=3.3cm, minimum height=1cm, font=\small},
+  flecha/.style={-{Latex[length=3mm]}, thick},
+  bloque/.style={rectangle, rounded corners, draw=black!60, fill=gray!10, align=center, minimum width=3.2cm, minimum height=0.9cm, font=\small}
+}
+
+% ===================== DATOS APA =====================
+\title{Sistema de Orientación de Rutas para la Optimización del Transporte Público en Puno: Informe Técnico bajo Formato APA}
+\shorttitle{Sistema de orientación de rutas en Puno}
+\author{Elmer José Pongo Callo}
+\affiliation{Universidad Nacional del Altiplano}
+\course{Lenguaje de Programación}
+\professor{José Luis Juárez Ruelas}
+\duedate{2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+El presente informe técnico analiza el diseño e implementación de un sistema de orientación de rutas para mejorar la toma de decisiones de los usuarios del transporte público en la ciudad de Puno. El proyecto se fundamenta en el paradigma de programación funcional, empleando estructuras de datos inmutables y funciones puras para separar el núcleo lógico de los efectos de entrada y salida. El sistema recomienda una línea directa a partir del origen y destino ingresados por el usuario, calcula la incertidumbre de la decisión mediante la entropía de Shannon y recalcula rutas alternas ante incidencias de congestión. Metodológicamente, el informe organiza el trabajo en un pipeline profesional compuesto por análisis del ejemplo base, definición del contenido, diseño de diagramas, redacción técnica, integración de referencias y validación final. Se presentan diagramas de arquitectura, flujo de recomendación y trazabilidad de requisitos, además de ecuaciones y criterios de selección que explican el funcionamiento del algoritmo. Los resultados esperados muestran que el sistema puede reducir la incertidumbre del pasajero, priorizar rutas directas y fortalecer la gestión operativa de conductores e incidencias. Se concluye que la solución es viable para un prototipo académico y escalable hacia una plataforma web con persistencia en base de datos y visualización cartográfica en tiempo real.
+\end{abstract}
+
+\keywords{transporte público, optimización de rutas, programación funcional, entropía de Shannon, Puno}
+
+\section{Introducción}
+El transporte público urbano presenta desafíos asociados con la falta de información clara sobre rutas, costos, frecuencia de unidades e incidencias operativas. En ciudades intermedias, donde muchas rutas se organizan de manera empírica, el usuario suele decidir con información incompleta. Esta situación puede modelarse como un problema de incertidumbre, debido a que varias líneas pueden cubrir parcialmente un mismo trayecto, pero no todas ofrecen el mismo nivel de conveniencia.
+
+El proyecto \textit{Sistema de Orientación de Rutas para la Optimización del Transporte Público en Puno} propone una solución informática basada en programación funcional. Su núcleo lógico procesa datos de líneas, paraderos, incidencias y turnos para recomendar la alternativa más directa y de menor costo. La incorporación de la entropía de Shannon permite cuantificar la incertidumbre antes de la recomendación \parencite{shannon1948}, mientras que el diseño funcional favorece la validación del sistema mediante pruebas unitarias y funciones sin efectos secundarios \parencite{hughes1989}.
+
+\section{Análisis del ejemplo base}
+El ejemplo base presenta una estructura propia de un informe técnico: portada institucional, resumen, planteamiento del problema, objetivos, metodología, diseño, codificación, validación, resultados, conclusiones, referencias y anexos. Además, utiliza diagramas para explicar actores del sistema, tipos de datos inmutables, flujo de funciones puras, trazabilidad de requisitos y generación de resultados \parencite{pongo2026}.
+
+A partir de dicho modelo, el presente informe reorganiza el contenido bajo criterios APA, manteniendo el enfoque técnico y reforzando tres elementos: (a) claridad metodológica, (b) integración de diagramas explicativos y (c) citación académica formal. Esta adaptación busca que el documento pueda ser usado directamente en Overleaf y ampliado con evidencias de implementación, capturas de interfaz, tablas de pruebas y anexos de código.
+
+\section{Planteamiento del problema}
+El problema principal es la incertidumbre del pasajero al elegir una línea de transporte público. Cuando el usuario desconoce qué unidad tomar, cuántos paraderos debe recorrer, cuál es el costo y si existen incidencias en el trayecto, el proceso de decisión se vuelve ineficiente. Esta incertidumbre puede generar pérdida de tiempo, selección de rutas no óptimas y mayor costo de desplazamiento.
+
+Desde el punto de vista computacional, el problema puede formularse como una búsqueda de rutas dentro de una red de paraderos. Cada línea representa una secuencia ordenada de puntos de parada y cada incidencia puede bloquear temporalmente una parte de la red. Por tanto, el sistema debe filtrar líneas directas, descartar rutas afectadas por congestión y seleccionar la mejor alternativa según criterios objetivos.
+
+\section{Objetivos}
+\subsection{Objetivo general}
+Evaluar la eficiencia de un sistema informático basado en programación funcional para orientar al usuario del transporte público en Puno mediante la recomendación de rutas directas, medición de incertidumbre y gestión de incidencias.
+
+\subsection{Objetivos específicos}
+\begin{enumerate}[label=\alph*)]
+    \item Modelar líneas, paraderos, vehículos, turnos e incidencias mediante estructuras de datos inmutables.
+    \item Recomendar la línea directa más corta considerando número de tramos y costo.
+    \item Calcular la entropía de Shannon para medir la incertidumbre asociada a las alternativas disponibles.
+    \item Recalcular rutas alternas cuando existan paraderos bloqueados por incidencias.
+    \item Validar el comportamiento del sistema con pruebas unitarias automatizadas.
+\end{enumerate}
+
+\section{Pipeline profesional para la generación del informe}
+La Figura~\ref{fig:pipeline-informe} resume el proceso recomendado para construir un informe técnico-científico en formato APA. Este pipeline permite pasar de un documento base a una versión organizada, fundamentada y visualmente comprensible.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[node distance=1.4cm]
+\node[entrada] (a) {1. Análisis\\del ejemplo base};
+\node[proceso, right=of a] (b) {2. Definición\\del contenido};
+\node[proceso, right=of b] (c) {3. Diseño\\de diagramas};
+\node[proceso, below=of c] (d) {4. Redacción\\en formato APA};
+\node[proceso, left=of d] (e) {5. Integración\\de referencias};
+\node[salida, left=of e] (f) {6. Validación\\y entrega final};
+\draw[flecha] (a) -- (b);
+\draw[flecha] (b) -- (c);
+\draw[flecha] (c) -- (d);
+\draw[flecha] (d) -- (e);
+\draw[flecha] (e) -- (f);
+\draw[flecha, dashed] (f.north) to[bend right=25] node[above, font=\scriptsize]{retroalimentación} (a.south);
+\end{tikzpicture}
+\caption{Pipeline profesional para la generación del informe técnico.}
+\par\small\textit{Nota.} El flujo organiza el trabajo desde la revisión del ejemplo hasta la entrega del documento final, permitiendo iteraciones de mejora.
+\label{fig:pipeline-informe}
+\end{figure}
+
+\section{Fundamento teórico}
+\subsection{Programación funcional}
+La programación funcional promueve el uso de funciones puras, composición e inmutabilidad. Una función pura devuelve siempre el mismo resultado ante las mismas entradas y no modifica estados externos. Este enfoque facilita la depuración y la validación mediante pruebas, ya que reduce el comportamiento inesperado producido por efectos secundarios \parencite{hughes1989}.
+
+En el sistema propuesto, el núcleo funcional se encarga de calcular rutas, filtrar incidencias, estimar entropía y seleccionar recomendaciones. La periferia imperativa, en cambio, se reserva para leer archivos, mostrar resultados en interfaz gráfica, abrir mapas o registrar datos en almacenamiento persistente.
+
+\subsection{Entropía de Shannon}
+La entropía de Shannon mide la incertidumbre promedio de una variable aleatoria. En el contexto del transporte público, si existen varias líneas candidatas para un trayecto, la entropía permite representar cuánta incertidumbre enfrenta el usuario antes de recibir una recomendación. La fórmula general es:
+
+\begin{equation}
+H(X) = - \sum_{i=1}^{n} p_i \log_2(p_i)
+\label{eq:entropia}
+\end{equation}
+
+Cuando las alternativas son equiprobables, es decir, cuando cada línea tiene probabilidad $p_i = 1/n$, la expresión se reduce a:
+
+\begin{equation}
+H(X) = \log_2(n)
+\label{eq:entropia-equiprobable}
+\end{equation}
+
+Por ejemplo, si cuatro líneas cubren el trayecto, la incertidumbre inicial es $H = \log_2(4) = 2$ bits. El sistema reduce esa incertidumbre al recomendar una sola línea según criterios de eficiencia.
+
+\subsection{Búsqueda de rutas}
+El problema de búsqueda de rutas puede abordarse mediante algoritmos de recorrido de grafos. Para un prototipo académico, la búsqueda en anchura permite encontrar rutas con menor número de transbordos en redes no ponderadas. En versiones futuras, algoritmos como Dijkstra o A* permitirían optimizar por tiempo, costo o distancia ponderada \parencite{cormen2009,dijkstra1959}.
+
+\section{Diseño del sistema}
+\subsection{Arquitectura funcional}
+La arquitectura adopta el patrón \textit{núcleo funcional puro / cáscara imperativa}. El núcleo contiene la lógica del dominio y la cáscara se encarga de la interacción con el usuario, lectura de archivos, persistencia y visualización.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[node distance=1.2cm]
+\node[entrada] (usuario) {Usuario\\origen/destino};
+\node[entrada, below=of usuario] (datos) {Datos JSON\\líneas e incidencias};
+\node[proceso, right=2.2cm of usuario] (shell) {Cáscara imperativa\\GUI / CLI / archivos};
+\node[proceso, right=2.4cm of shell] (core) {Núcleo funcional\\funciones puras};
+\node[salida, right=2.4cm of core] (salida) {Recomendación\\línea, costo, alerta};
+\node[bloque, below=of core] (tests) {Pruebas unitarias\\validación del núcleo};
+\draw[flecha] (usuario) -- (shell);
+\draw[flecha] (datos) -- (shell);
+\draw[flecha] (shell) -- node[above, font=\scriptsize]{datos inmutables} (core);
+\draw[flecha] (core) -- node[above, font=\scriptsize]{resultado} (salida);
+\draw[flecha, dashed] (tests) -- (core);
+\end{tikzpicture}
+\caption{Arquitectura funcional del sistema de orientación de rutas.}
+\par\small\textit{Nota.} La lógica se mantiene en el núcleo funcional y los efectos externos se aíslan en la cáscara imperativa.
+\label{fig:arquitectura}
+\end{figure}
+
+\subsection{Modelo de datos}
+El sistema puede representarse mediante tipos de datos inmutables. Las entidades principales son: línea, vehículo, segmento, ruta, turno, aviso, cuenta, incidencia, reporte y recomendación. En Python, estas entidades pueden implementarse con \texttt{NamedTuple}, \texttt{dataclass(frozen=True)} o tuplas nombradas, asegurando que los datos no sean modificados accidentalmente durante el cálculo.
+
+\begin{table}[H]
+\centering
+\caption{Tipos de datos principales del sistema}
+\begin{tabular}{p{3.2cm}p{9cm}}
+\toprule
+\textbf{Entidad} & \textbf{Descripción técnica} \\
+\midrule
+Línea & Representa una ruta de transporte con número, color, costo, frecuencia, paraderos y vehículos asociados. \\
+Vehículo & Contiene placa, capacidad y relación con una línea de transporte. \\
+Incidencia & Describe congestión, bloqueo u otro evento activo en un paradero específico. \\
+Turno & Registra línea, placa, hora programada, hora real y estado operativo del conductor. \\
+Recomendación & Resultado del algoritmo: línea sugerida, alternativas, entropía, alerta y posible ruta con transbordo. \\
+\bottomrule
+\end{tabular}
+\label{tab:datos}
+\end{table}
+
+\section{Algoritmo de recomendación}
+El algoritmo recibe origen, destino, red de líneas e incidencias activas. Primero obtiene los paraderos bloqueados, luego filtra las líneas directas que cubren el trayecto sin pasar por dichos puntos. Si existen líneas candidatas, calcula la entropía y selecciona la mejor línea. Si no existe línea directa, ejecuta una búsqueda con transbordos.
+
+El criterio de selección de la línea recomendada se define como:
+
+\begin{equation}
+\text{línea}^{*} = \arg\min_{l \in Directas} (tramos(l), costo(l))
+\label{eq:criterio}
+\end{equation}
+
+La Figura~\ref{fig:flujo-recomendacion} muestra el flujo lógico del algoritmo y destaca el punto donde se calcula la entropía de Shannon.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[node distance=1.15cm]
+\node[entrada] (input) {Entrada\\origen, destino, líneas};
+\node[entrada, right=2.2cm of input] (inc) {Incidencias\\activas};
+\node[proceso, below=of input] (bloq) {Obtener paraderos\\bloqueados};
+\node[proceso, below=of bloq] (filtrar) {Filtrar líneas directas\\que evitan congestión};
+\node[alerta, below=of filtrar] (entropy) {Calcular entropía\\$H(X) = -\sum p_i\log_2(p_i)$};
+\node[decision, below=of entropy] (decision) {¿Hay línea\\directa?};
+\node[proceso, below left=1.2cm and 1.2cm of decision] (directa) {Elegir mejor línea\\mín. tramos y costo};
+\node[proceso, below right=1.2cm and 1.2cm of decision] (bfs) {Buscar ruta alterna\\BFS con transbordos};
+\node[salida, below=2.1cm of decision] (rec) {Salida\\recomendación + alerta};
+\draw[flecha] (input) -- (bloq);
+\draw[flecha] (inc) |- (bloq);
+\draw[flecha] (bloq) -- (filtrar);
+\draw[flecha] (filtrar) -- (entropy);
+\draw[flecha] (entropy) -- (decision);
+\draw[flecha] (decision) -- node[left, font=\scriptsize]{Sí} (directa);
+\draw[flecha] (decision) -- node[right, font=\scriptsize]{No} (bfs);
+\draw[flecha] (directa) -- (rec);
+\draw[flecha] (bfs) -- (rec);
+\end{tikzpicture}
+\caption{Flujo funcional del algoritmo de recomendación de ruta.}
+\par\small\textit{Nota.} La entropía se calcula antes de seleccionar la línea para cuantificar la incertidumbre inicial del usuario.
+\label{fig:flujo-recomendacion}
+\end{figure}
+
+\subsection{Pseudocódigo del algoritmo principal}
+\begin{verbatim}
+ALGORITMO recomendar_linea(origen, destino, lineas, incidencias)
+    bloqueados <- paraderos_bloqueados(incidencias)
+    directas <- filtrar(lineas, cubre_trayecto_libre(origen, destino, bloqueados))
+    H <- entropia_shannon(directas)
+
+    SI directas no esta vacio ENTONCES
+        recomendada <- min(directas, clave=(tramos_hasta_destino, costo))
+        devolver Recomendacion(recomendada, H, directas, transbordo=falso)
+    SINO
+        ruta <- buscar_mejor_ruta(origen, destino, lineas, bloqueados)
+        devolver Recomendacion(nulo, 0, (), transbordo=verdadero, ruta=ruta)
+    FIN SI
+FIN ALGORITMO
+\end{verbatim}
+
+\section{Trazabilidad de requisitos}
+La Tabla~\ref{tab:requisitos} resume los requisitos técnicos principales del sistema. Esta matriz permite verificar que cada funcionalidad tenga correspondencia con una decisión de diseño y una forma de validación.
+
+\begin{table}[H]
+\centering
+\caption{Matriz de trazabilidad de requisitos}
+\begin{tabular}{p{1.4cm}p{5.2cm}p{3.2cm}p{3.2cm}}
+\toprule
+\textbf{ID} & \textbf{Requisito} & \textbf{Componente} & \textbf{Validación} \\
+\midrule
+RF1 & Recomendar línea directa más corta. & Algoritmo de recomendación. & Prueba de ruta origen-destino. \\
+RF2 & Recalcular ruta ante incidencia. & Filtro de bloqueos y BFS. & Caso con paradero bloqueado. \\
+RF3 & Gestionar login de conductor y administrador. & Autenticación con hash. & Prueba de credenciales. \\
+RF4 & Marcar turno y clasificar estado. & Módulo de operación. & Comparación hora real/programada. \\
+RNF1 & Mantener pureza del núcleo. & Funciones puras. & Pruebas unitarias repetibles. \\
+RNF2 & Usar datos inmutables. & NamedTuple o dataclass frozen. & Revisión de estructura. \\
+\bottomrule
+\end{tabular}
+\label{tab:requisitos}
+\end{table}
+
+\section{Resultados esperados}
+Con base en el modelo propuesto, se espera que el sistema cumpla tres resultados principales. Primero, debe reducir la incertidumbre del usuario al transformar varias alternativas posibles en una recomendación clara. Segundo, debe evitar rutas afectadas por incidencias activas, lo cual mejora la continuidad del servicio. Tercero, debe apoyar la operación de conductores mediante turnos, alertas y sanciones registradas.
+
+Un caso representativo consiste en consultar el trayecto \textit{EsSalud Salcedo--Universidad}. Si existen cuatro líneas directas candidatas, la incertidumbre inicial es de 2 bits. Luego, el algoritmo recomienda la línea con menor número de tramos y, en caso de empate, la de menor costo. Si una incidencia bloquea un paradero crítico, la recomendación cambia hacia una línea alterna que evite el punto congestionado.
+
+\section{Discusión}
+El uso de programación funcional resulta apropiado para este tipo de sistema porque la lógica de recomendación puede expresarse como una composición de transformaciones sobre datos. Esta separación mejora la mantenibilidad: los cambios en la interfaz gráfica no deben afectar el cálculo de rutas, y los cambios en los archivos de datos no deben modificar el criterio del algoritmo.
+
+No obstante, el prototipo presenta límites. La búsqueda en anchura es suficiente para escenarios pequeños, pero en una red real con muchas líneas y paraderos sería recomendable representar la ciudad como un grafo ponderado. En ese caso, Dijkstra o A* permitirían considerar tiempos de viaje, distancia, tráfico o frecuencia real de vehículos \parencite{cormen2009,dijkstra1959}. Asimismo, una entropía ponderada por frecuencia de unidades representaría mejor la incertidumbre real, porque una línea que pasa cada cinco minutos no debería tener el mismo peso que una línea que pasa cada treinta minutos.
+
+\section{Conclusiones}
+El sistema de orientación de rutas para Puno constituye una propuesta viable para apoyar la toma de decisiones del usuario del transporte público. Su principal aporte es combinar programación funcional, búsqueda de rutas y entropía de Shannon en un prototipo comprensible, verificable y escalable. La entropía permite medir la incertidumbre inicial del pasajero, mientras que el criterio de selección reduce esa incertidumbre a una recomendación concreta.
+
+El enfoque funcional aporta claridad al diseño, debido a que las funciones puras son fáciles de probar y las estructuras inmutables reducen errores por modificación accidental de datos. Como mejora futura, se recomienda integrar persistencia en base de datos, un visor cartográfico web, datos reales de frecuencia y algoritmos de rutas ponderadas por tiempo o distancia. Estas mejoras permitirían convertir el prototipo académico en una herramienta operativa para escenarios reales de movilidad urbana.
+
+\printbibliography
+
+\appendix
+\section{Anexo A: Indicaciones para adaptar en Overleaf}
+\begin{enumerate}
+    \item Crear un proyecto nuevo en Overleaf.
+    \item Subir los archivos \texttt{main.tex} y \texttt{referencias.bib}.
+    \item Compilar con \textbf{Biber} como gestor bibliográfico.
+    \item Agregar capturas de la interfaz o resultados del programa en la sección de resultados.
+    \item Si se desea usar imágenes externas, reemplazar los diagramas TikZ por archivos PNG o PDF usando \texttt{\textbackslash includegraphics}.
+\end{enumerate}
+
+\end{document}

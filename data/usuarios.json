@@ -1,0 +1,18 @@
+[
+  {
+    "usuario": "admin",
+    "clave_hash": "240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9",
+    "rol": "administrador",
+    "linea": "",
+    "placa": "",
+    "suspendido": false
+  },
+  {
+    "usuario": "chofer1",
+    "clave_hash": "5ac0852e770506dcd80f1a36d20ba7878bf82244b836d9324593bd14bc56dcb5",
+    "rol": "conductor",
+    "linea": "L50",
+    "placa": "VAA-501",
+    "suspendido": false
+  }
+]

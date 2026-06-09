@@ -1,0 +1,18 @@
+flowchart TD
+    A[Entrada: origen, destino, líneas] --> B[Incidencias activas]
+    B --> C[paraderos_bloqueados]
+    A --> D[buscar_rutas_directas]
+    C --> D
+    D --> E[entropia_shannon]
+    E --> F{¿Hay líneas directas?}
+    F -- Sí --> G[elegir_linea_mas_directa]
+    G --> H[Recomendación: línea + costo + tramos]
+    F -- No --> I[buscar_mejor_ruta BFS]
+    I --> J[Recomendación: ruta con transbordos]
+    H --> K[Salida al pasajero]
+    J --> K
+    K --> L[URL Google Maps]
+
+    style E fill:#fff3b0,stroke:#d99a00,stroke-width:2px
+    style G fill:#caffbf,stroke:#2d6a4f,stroke-width:2px
+    style I fill:#bde0fe,stroke:#1d4ed8,stroke-width:2px
